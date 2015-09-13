@@ -1,0 +1,10 @@
+temp <- tempfile()
+download.file("https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip",temp)
+allData <- read.csv2(unz(temp, "household_power_consumption.txt"), header=TRUE, , as.is = TRUE, na.strings = "?")
+unlink(temp)
+rm(temp)
+selData<-allData[which(allData$Date == "1/2/2007" | allData$Date == "2/2/2007"),]
+rm(allData)
+selData$DateTime<- paste(selData$Date, selData$Time, sep = " ")
+selData$DateTime<-strptime(selData$DateTime, "%d/%m/%Y %H:%M:%S", tz = "")
+selData[,3:9] <- sapply(selData[,3:9], as.numeric)
